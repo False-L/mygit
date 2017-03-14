@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<title>浏览器检测</title>
+<script type="text/javascript" src="clientCheck.js"></script>
+</head>
+<body>
+<div id="engine">1111</div>
+<div id="browser"></div>
+<div id="system"></div>
+<script type="text/javascript">
+var e1=document.getElementById("engine");
+var s1=document.getElementById("system");
+e1.innerHTML=null;
+if(client.engine.webkit){
+	if(client.browser.chrome){
+	e1.innerHTML="您的浏览器版本为:<\/br \>chrome:"+client.browser.chrome;
+	}else if(client.browser.safari){
+	e1.innerHTML="您的浏览器版本为:<\/br \>safari:"+client.browser.safari;
+	}
+}else if(client.engine.gecko){
+	if(client.browser.firefox){
+	e1.innerHTML="您的浏览器版本为:<\/br \>firefox:"+client.browser.firefox;
+	}else{
+	alert("其他");
+	}
+}
+if(client.system.win){
+  s1.innerHTML="您的操作系统为:<\/br \>window:"+client.system.win;
+  }
+
+</script>
+</body>
+</html>
