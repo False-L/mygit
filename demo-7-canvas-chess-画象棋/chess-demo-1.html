@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>中国象棋</title>
+<script type="text/javascript">
+</script>
+<style type="text/css">
+canvas{
+border:2px solid #000;
+left:-50%;
+}
+</style>
+</head>
+<body>
+<canvas id="chess" width="520px;" height="580px;">
+您的浏览器不支持canvas属性，请更新至更高版本的浏览器
+</canvas>
+<script type="text/javascript" src="chees.js"></script>
+<script type="text/javascript">
+	var canvas =document.getElementById("chess");
+	ctx= canvas.getContext("2d");
+function drawChessboard(){
+	ctx.moveTo(20,20);
+	ctx.lineTo(500,20);
+	ctx.lineTo(500,560);
+	ctx.lineTo(20,560);
+	ctx.closePath()
+	ctx.stroke();
+	//棋盘横线
+	ctx.moveTo(20,80);
+	ctx.lineTo(500,80);
+	ctx.moveTo(20,140);
+	ctx.lineTo(500,140);
+	ctx.moveTo(20,200);
+	ctx.lineTo(500,200);
+	ctx.moveTo(20,260);
+	ctx.lineTo(500,260);
+	ctx.moveTo(20,320);
+	ctx.lineTo(500,320);
+	ctx.moveTo(20,380);
+	ctx.lineTo(500,380);
+	ctx.moveTo(20,440);
+	ctx.lineTo(500,440);
+	ctx.moveTo(20,500);
+	ctx.lineTo(500,500);
+	ctx.stroke();
+	//棋盘竖线
+	var j=60;
+	ctx.moveTo(80,20);
+	ctx.lineTo(80,260);
+	ctx.moveTo(80,320);
+	ctx.lineTo(80,560);
+	ctx.stroke();
+	ctx.moveTo(140,20);
+	ctx.lineTo(140,260);
+	ctx.moveTo(140,320);
+	ctx.lineTo(140,560);
+	ctx.stroke();
+	ctx.moveTo(20+3*j,20);
+	ctx.lineTo(20+3*j,260);
+	ctx.moveTo(20+3*j,320);
+	ctx.lineTo(20+3*j,560);
+	ctx.stroke();
+	ctx.moveTo(20+4*j,20);
+	ctx.lineTo(20+4*j,260);
+	ctx.moveTo(20+4*j,320);
+	ctx.lineTo(20+4*j,560);
+	ctx.stroke();
+	ctx.moveTo(20+5*j,20);
+	ctx.lineTo(20+5*j,260);
+	ctx.moveTo(20+5*j,320);
+	ctx.lineTo(20+5*j,560);
+	ctx.stroke();
+	ctx.moveTo(20+6*j,20);
+	ctx.lineTo(20+6*j,260);
+	ctx.moveTo(20+6*j,320);
+	ctx.lineTo(20+6*j,560);
+	ctx.stroke();
+	ctx.moveTo(20+7*j,20);
+	ctx.lineTo(20+7*j,260);
+	ctx.moveTo(20+7*j,320);
+	ctx.lineTo(20+7*j,560);
+	ctx.stroke();
+	//x
+	ctx.moveTo(20+3*j,20);
+	ctx.lineTo(20+5*j,20+2*j);
+	ctx.stroke();
+	ctx.moveTo(20+5*j,20);
+	ctx.lineTo(20+3*j,20+2*j);
+	ctx.stroke();
+	//楚河汉界
+	ctx.font="30px Georgia";
+	ctx.fillText("楚河",80,300);
+	ctx.save();
+	ctx.translate(440,280);
+	ctx.rotate(Math.PI);
+	//ctx.font="30px Georgia";
+	//ctx.fillText("汉界",380,300);
+	ctx.fillText("汉界",0,0);
+	ctx.restore();
+}
+drawChessboard();
+
+//单个棋子 只是用于测试
+var chessman ={
+	 x:20,
+	 y:20,
+	 radius:20,
+		 color:'red',
+	 draw: function(){
+	  ctx.beginPath();
+	  ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,true);
+	  ctx.closePath();
+	  ctx.fillStyle = this.color;
+	  ctx.fill();
+	  ctx.save();
+	   ctx.fillStyle = "black";
+	  ctx.font="20px Georgia";
+	  ctx.fillText("車",10,30);
+	  //ctx.restore();
+	  ctx.stroke();
+	  }
+	};
+//chessman.draw();
+//全部棋子
+var game={
+	row:10,
+	co:9,
+	draw:function(r,c){
+		ctx.beginPath();
+		ctx.arc(c*60+20,r*60+20,20,0,Math.PI*2,true);
+		ctx.closePath();
+		ctx.fillText("che",c*60+20,r*60+20);
+		ctx.fill();
+	},
+	init:[
+		//红方
+		{r:0,c:0,value:10,name:"車"},//红車左redC1:
+		{r:0,c:1,value:7,name:"馬"},//红車右redC2:
+		{r:0,c:7,value:10,name:"馬"},//红馬左redM1:
+		{r:0,c:8,value:7,name:"車"},//红ma右redM2:
+		{r:0,c:2,value:7,name:"相"},//红ma右redM2:
+		{r:0,c:6,value:7,name:"相"},//红ma右redM2:
+		{r:0,c:3,value:7,name:"仕"},//红ma右redM2:
+		{r:0,c:5,value:7,name:"仕"},//红ma右redM2:
+		{r:0,c:4,value:7,name:"帥"},//红ma右redM2:
+		{r:2,c:1,value:7,name:"炮"},//红ma右redM2:
+		{r:2,c:7,value:7,name:"炮"},//红ma右redM2:
+		{r:3,c:0,value:7,name:"兵"},//红ma右redM2:
+		{r:3,c:2,value:7,name:"兵"},//红ma右redM2:
+		{r:3,c:4,value:7,name:"兵"},//红ma右redM2:
+		{r:3,c:6,value:7,name:"兵"},//红ma右redM2:
+		{r:3,c:8,value:7,name:"兵"},//红ma右redM2:
+		//黑方
+		{r:9,c:0,value:-10,name:"車"},//红車左redC1:
+		{r:9,c:1,value:-7,name:"馬"},//红車右redC2:
+		{r:9,c:7,value:-10,name:"馬"},//红馬左redM1:
+		{r:9,c:8,value:-7,name:"車"},//红ma右redM2:
+		{r:9,c:2,value:-7,name:"象"},//红ma右redM2:
+		{r:9,c:6,value:-7,name:"象"},//红ma右redM2:
+		{r:9,c:3,value:-7,name:"士"},//红ma右redM2:
+		{r:9,c:5,value:-7,name:"士"},//红ma右redM2:
+		{r:9,c:4,value:-7,name:"将"},//红ma右redM2:
+		{r:7,c:1,value:-7,name:"炮"},//红ma右redM2:
+		{r:7,c:7,value:-7,name:"炮"},//红ma右redM2:
+
+		{r:6,c:0,value:-7,name:"卒"},//红ma右redM2:
+		{r:6,c:2,value:-7,name:"卒"},//红ma右redM2:
+		{r:6,c:4,value:-7,name:"卒"},//红ma右redM2:
+		{r:6,c:6,value:-7,name:"卒"},//红ma右redM2:
+		{r:6,c:8,value:-7,name:"卒"},//红ma右redM2:
+	],
+	drawAll:function(){
+		this.init.forEach(function(i,index){
+		ctx.beginPath();
+	  	ctx.arc(i.c*60+20,i.r*60+20,20,0,Math.PI*2,true);
+	  	ctx.closePath();
+	if(i.value>0){
+	 	ctx.fillStyle = "red";
+	  	ctx.fill();
+		//ctx.save();
+	  	ctx.fillStyle = "black";
+	  	ctx.font="20px Georgia";
+	}else{
+		ctx.fillStyle = "black";
+	  	ctx.fill();
+		//ctx.save();
+	  	ctx.fillStyle = "white";
+	  	ctx.font="20px Georgia";
+	}
+	  	ctx.fillText(i.name,10+i.c*60,26+i.r*60);
+	  //ctx.restore();
+	 	 ctx.stroke();
+		  ctx.save();
+		})
+	}
+};
+game.drawAll();
+</script>
+</body>
+</html>
