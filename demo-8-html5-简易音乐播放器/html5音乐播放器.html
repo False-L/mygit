@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>简易h5音乐播放器</title>
+<link href="http://cdn.bootcss.com/semantic-ui/2.2.9/components/icon.css" rel="stylesheet">
+<style type="text/css">
+body{
+background-color:#DDD;
+}
+#mybtn{
+}
+#media{
+width:400px;
+padding:5px;
+}
+.controls{
+margin-left:auto;
+margin-right:auto;
+padding:10px;
+width:700px;
+background:#FFF;
+border-radius:.3em;
+}
+button{
+font-size:1.2em;
+
+}
+input[type=range]{
+-webkit-appearance:none;
+width:200px;
+}
+input[type=range]::-webkit-slider-thumb{
+	-webkit-appearance:none;
+	height:15px;
+	width:15px;
+	margin-top:-5px;
+	background:#DDD;
+	border:solid 6px #3385ff;
+	border-radius:50%;
+	cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{
+	height:5px;
+	background:#DDD;
+}
+input[type=range]:focus{
+	outline:none;
+}
+.play-icon{
+ display:inline-block;
+ height:1em;
+ width:1em;
+}
+
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+<div class="area" id="mybtn">
+</div>
+
+<div class="musicplayer">
+	<audio id="media">
+		<source src="audio/London Music Works - Hello Zep.mp3" type="audio/mpeg">
+	您的播放器不支持html5
+	</audio>
+	<div class="controls">		
+		<button class="button1" id="audio-btn"><i class="play icon"></i></button>		
+		<button class="button1" id="audio-stop"><i class="stop icon"></i></button>		
+		<span id="curtime">0:00</span>/<span id="duration">00:00</span>
+		<input type="range" id="range" min="1" max="100" step="1" value="1" />
+		<button id="volumebtn"><i class="volume up icon"></i></button>
+		<input type="range" id="getvolume" min="1" max="100" value="1" />
+	</div>
+	<span></span>
+	<div id="playerm"></div>
+	<div id="mtitle"></div>
+	
+</div>
+<video>
+</video>
+
+<script type="text/javascript">
+var EventUtil = {
+	addHandler: function(element,type,handler){
+		if(element.addEventListener){
+		element.addEventListener(type,handler,false);
+		
+		}else if(element.attachEvent){
+		element.attachEvent("on"+type,handler);
+	
+		}else{
+		element["on"+type]=handler;
+		}	
+	},
+	removeHandler: function(element,type, handler){
+	if(element.removeEventListener){
+		element.removeEventListener(type,handler,false);
+		}else if(element.detachEvent){
+		element.detachEvent("on"+type,handler);
+		}else{
+		element["on"+type]=null;
+		}
+	}
+}	
+	var player=document.getElementById("media");
+	var btn=document.getElementById("audio-btn");
+	var audio_stop=document.getElementById("audio-stop");
+	var curtime=document.getElementById("curtime");
+	var duration=document.getElementById("duration");
+	var playerm=document.getElementById("playerm");
+	var range=document.getElementById("range");
+	var getvolume=document.getElementById("getvolume");
+	var volumebtn=document.getElementById("volumebtn");
+	//初始化
+	player.volume=0.5;
+	
+	//添加durationchange事件
+	EventUtil.addHandler(player,"durationchange",function(event){
+	var a=player.duration;
+	var b=parseInt(a/60);
+	var c=parseInt(a%60);
+	if(c<10){
+	duration.innerHTML="0"+b+":0"+c;//还未加载完音频也会导致NaN
+	playerm.innerHTML="加载完成";
+	}else{
+		duration.innerHTML="0"+b+":"+c;//还未加载完音频也会导致NaN
+		playerm.innerHTML="加载完成";
+	}
+	});
+	//播放/暂停---添加click事件
+	EventUtil.addHandler(btn,"click",function(event){
+	if(player.paused){
+	player.play();
+	btn.innerHTML ="<i class=\"pause icon\"></i>";
+	}else{
+	player.pause();
+	btn.innerHTML="<i class=\"play icon\"></i>";
+	}
+	});
+	//停止---添加click事件
+	EventUtil.addHandler(audio_stop,"click",function(event){
+	player.currentTime = 0;
+	player.pause();	
+	btn.innerHTML="<i class=\"play icon\"></i>";
+	});
+	//音量静音---添加click事件
+	EventUtil.addHandler(volumebtn,"click",function(event){
+	if(player.muted){
+	player.muted=0;
+	volumebtn.innerHTML="<i class=\"volume up icon\"></i>";
+	}else{
+	player.muted=1;
+	volumebtn.innerHTML="<i class=\"mute icon\"></i>";
+	}
+	});
+	//
+	setInterval(function(){
+	var a=player.currentTime;
+	var b=parseInt(a/60);
+	var c=parseInt(a%60);
+	if(b<10){
+		if(c<10){
+		curtime.innerHTML = "0"+b+":0"+c;
+		}else{
+		curtime.innerHTML = "0"+b+":"+c;
+		}
+	}else{
+	if(c<10){
+		curtime.innerHTML = b+":0"+c;
+		}else{
+		curtime.innerHTML = b+":"+c;
+		}
+	}
+	},250);	
+	setInterval(function(){
+	var a=player.duration;
+	var b=player.currentTime;
+	range.value=parseInt(100*b/a);
+	playerm.innerHTML=range.value+"%";
+	},1000);
+	EventUtil.addHandler(range,"mouseup",function(event){
+	player.currentTime=range.value/100*player.duration;
+	});
+	setInterval(function(){
+	getvolume.value=player.volume*100;
+	},2000);
+	EventUtil.addHandler(getvolume,"mouseup",function(event){
+	player.volume=getvolume.value/100;
+	});
+</script>
+
+</body>
+</html>
